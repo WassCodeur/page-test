@@ -8,7 +8,7 @@
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "card_builder_templates.py"
+            "dest": "cats.py"
         }
     ]
 }
