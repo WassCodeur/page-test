@@ -1,7 +1,7 @@
 {
     "builds": [
         {
-            "src": "cats.py",
+            "src": "simple_demo.py",
             "use": "@vercel/python"
         }
     ],
