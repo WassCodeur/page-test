@@ -31,7 +31,10 @@ async def homepage(gevent: models.GEvent):
 
     message += ' ' + gevent.commonEventObject.hostApp
 
-    return create_cat_card(message, True)
+    response = create_cat_card(message, True)
+    response["commonEventObject"]["timeZone"]["offset"] = str(date.utcoffset().total_seconds() // 60
+
+    return response
 
 
 @app.post('/on_items_selected', response_class=JSONResponse)
