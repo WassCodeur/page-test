@@ -21,20 +21,24 @@ async def root():
 
 
 @app.post("/homepage", response_class=JSONResponse)
-async def homepage(gevent: models.GEvent):
-    date = datetime.now(tz=pytz.timezone(gevent.commonEventObject.timeZone.id))
-    message = 'Good night'
-    if 12 > date.hour >= 6:
-        message = 'Good morning'
-    elif 18 > date.hour >= 12:
-        message = 'Good afternoon'
+async def homepage(body: dict):
+    if "commonEventObject" not in body or "timeZone" not in body["commonEventObject"]:
+        raise HTTPException(status_code=422, detail={"detail": "commonEventObject must contain timeZone"})
 
-    message += ' ' + gevent.commonEventObject.hostApp
+    message = 'Hello'
+    if body["commonEventObject"]["timeZone"]:
+        date = datetime.now(tz=pytz.timezone(
+            body["commonEventObject"]["timeZone"]["id"]))
+        message = 'Good night'
+        if 12 > date.hour >= 6:
+            message = 'Good morning'
+        elif 18 > date.hour >= 12:
+            message = 'Good afternoon'
 
-    response = create_cat_card(message, True)
-    response["commonEventObject"]["timeZone"]["offset"] = str(date.utcoffset().total_seconds() // 60
+    message += ' ' + body["commonEventObject"]["hostApp"]
+  
+    return create_cat_card(message, True)
 
-    return response
 
 
 @app.post('/on_items_selected', response_class=JSONResponse)
